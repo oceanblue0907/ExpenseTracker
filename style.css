@@ -2,7 +2,7 @@
     --primary: #168b86;
     --bg: #f8fafc;
     --card: #ffffff;
-    --text: #ced5df;
+    --text: #1e293b;
 }
 
 body {
@@ -12,15 +12,18 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 20px;
+    margin: 0;
 }
 
 .container {
-    width: 450px;
+    width: 95%;
+    max-width: 450px;
     background: var(--card);
-    padding: 30px;
+    padding: 25px;
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
     animation: fadeInSlide 0.6s ease-out;
+    box-sizing: border-box;
 }
 
 .balance-container {
@@ -32,7 +35,7 @@ body {
 .balance-box {
     flex: 1;
     background: var(--primary);
-    color: #1e293b;
+    color: #ffffff;
     padding: 15px;
     border-radius: 12px;
     text-align: center;
@@ -41,18 +44,22 @@ body {
 
 .balance-box:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(134, 218, 218, 0.3);
+    box-shadow: 0 5px 15px rgba(22, 139, 134, 0.3);
 }
 
-.balance-remaining { background: #e2e8f0; }
+.balance-remaining { 
+    background: #e2e8f0; 
+    color: var(--text);
+}
 
 input, select {
     width: 100%;
     padding: 12px;
-    margin: 10px 0;
+    margin: 8px 0;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     box-sizing: border-box;
+    font-size: 16px; /* Prevents mobile zoom */
 }
 
 .controls {
@@ -61,7 +68,7 @@ input, select {
     gap: 8px;
 }
 
-select {
+#month-filter {
     width: auto;
     padding: 5px;
     font-size: 0.8rem;
@@ -71,30 +78,21 @@ select {
 #download-btn {
     background: #e2e8f0;
     border: none;
-    padding: 5px 8px;
+    padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.9rem;
 }
-
-#download-btn:hover { background: #cbd5e1; }
 
 .btn {
     width: 100%;
     padding: 12px;
     background: var(--primary);
-    color: #1e293b;
+    color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-    transition: all 0.2s ease;
-}
-
-.btn:active { transform: scale(0.96); }
-.btn:hover {
-    filter: brightness(1.1);
-    box-shadow: 0 4px 12px rgba(18, 116, 116, 0.2);
+    margin-top: 10px;
 }
 
 .history-header {
@@ -102,6 +100,8 @@ select {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .clear-btn {
@@ -124,14 +124,18 @@ select {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 12px;
     margin-bottom: 8px;
     border-radius: 6px;
     border-left: 5px solid var(--primary);
+    font-size: 0.9rem;
 }
 
-.list-item-new {
-    animation: popIn 0.4s cubic-bezier(0.26, 0.53, 0.74, 1.48);
+.item-right {
+    text-align: right;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .delete-btn {
@@ -140,30 +144,24 @@ select {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    padding: 2px 6px;
-    font-size: 0.8rem;
-    transition: transform 0.2s ease;
-}
-
-.delete-btn:hover { 
-    background: #ef4444; 
-    transform: rotate(90deg) scale(1.2);
+    padding: 2px 8px;
 }
 
 .chart-container {
-    margin: 25px 0;
-    padding: 20px;
-    height: 320px;
+    margin: 20px 0;
+    padding: 15px;
+    height: 300px;
     background: #f8fafc;
     border: 2px dashed #cbd5e1;
     border-radius: 12px;
+    position: relative;
 }
 
-/* --- Scroll Reveal Classes --- */
+/* Scroll Reveal */
 .reveal {
     opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease-out;
+    transform: translateY(20px);
+    transition: all 0.6s ease-out;
 }
 
 .reveal.active {
@@ -171,14 +169,19 @@ select {
     transform: translateY(0);
 }
 
-/* --- Animations --- */
+/* Mobile Adjustments */
+@media (max-width: 400px) {
+    .balance-container {
+        flex-direction: column;
+    }
+    
+    .history-header {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
 @keyframes fadeInSlide {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes popIn {
-    0% { transform: scale(0.9); opacity: 0; }
-    70% { transform: scale(1.05); }
-    100% { transform: scale(1); opacity: 1; }
 }

@@ -22,7 +22,7 @@ function init() {
     dateInput.valueAsDate = new Date();
     populateFilters();
     renderData();
-    initScrollReveal(); // Initialize reveal effect
+    initScrollReveal();
 }
 
 function populateFilters() {
@@ -83,7 +83,7 @@ function updateChart(filteredData) {
             labels: labels,
             datasets: [{
                 data: data,
-                backgroundColor: ['#0a5b66', '#38bdf8', '#818cf8', '#fb7185', '#fbbf24', '#34d399'],
+                backgroundColor: ['#168b86', '#38bdf8', '#818cf8', '#fb7185', '#fbbf24', '#34d399'],
                 borderWidth: 1
             }]
         },
@@ -124,8 +124,6 @@ function removeExpense(id) {
 
 function addExpenseToDOM(expense) {
     const item = document.createElement('li');
-    item.classList.add('list-item-new'); 
-    
     item.innerHTML = `
         <div><strong>${expense.date}</strong> [${expense.category}]<br><small>${expense.text}</small></div>
         <div class="item-right">
@@ -138,38 +136,28 @@ function addExpenseToDOM(expense) {
 
 function downloadReport() {
     const selectedMonth = monthFilter.value;
-    const filtered = selectedMonth === 'all' 
-        ? expenses 
-        : expenses.filter(exp => exp.date.startsWith(selectedMonth));
-
+    const filtered = selectedMonth === 'all' ? expenses : expenses.filter(exp => exp.date.startsWith(selectedMonth));
     if (filtered.length === 0) return alert("No data to download.");
 
     let csvContent = "Date,Category,Description,Amount\n";
     filtered.forEach(exp => {
-        const cleanDesc = exp.text.replace(/,/g, ""); 
-        csvContent += `${exp.date},${exp.category},${cleanDesc},${exp.amount.toFixed(2)}\n`;
+        csvContent += `${exp.date},${exp.category},${exp.text.replace(/,/g, "")},${exp.amount.toFixed(2)}\n`;
     });
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `Expense_Report_${selectedMonth}.csv`;
+    a.download = `Expenses_${selectedMonth}.csv`;
     a.click();
-    URL.revokeObjectURL(url);
 }
 
-// Scroll Reveal Logic
 function initScrollReveal() {
-    const observerOptions = { threshold: 0.1 };
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('active');
-            }
+            if (entry.isIntersecting) entry.target.classList.add('active');
         });
-    }, observerOptions);
-
+    }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 }
 
@@ -179,16 +167,10 @@ clearBtn.addEventListener('click', () => {
     if(confirm('Clear all data?')) {
         expenses = [];
         localStorage.removeItem('expenses');
-        monthFilter.value = 'all';
         init();
     }
 });
-
-budgetInput.addEventListener('input', () => {
-    savedBudget = budgetInput.value;
-    renderData();
-});
-
+budgetInput.addEventListener('input', renderData);
 form.addEventListener('submit', addExpense);
 
 init();
